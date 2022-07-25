@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { getPublicAssetPath, IS_MOBILE } from '../../../utils';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { PageType } from '../../app/App.config';
 import {
     AppContext,
@@ -14,23 +15,24 @@ import './TreeGL.less';
 
 export const TreeGL = (props) => {
     const containerRef = useRef<HTMLDivElement>(null);
-    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     usePageVisible(PageType.Tree, () => {
-        const canvas = canvasRef.current;
         const container = containerRef.current;
-        if (!canvas || !container) {
+        if (!container) {
             return;
         }
+        const clock = new THREE.Clock();
+        let mixer: THREE.AnimationMixer;
         let frameId: number;
-        let renderedImageIndex = -1;
-        let imageDataArray: HTMLImageElement[] = [];
         let loaded = false;
         let loading = false;
-
-        const context = canvas.getContext('2d');
-        canvas.width = IS_MOBILE ? 284 : 960;
-        canvas.height = IS_MOBILE ? 320 : 1080;
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        container.appendChild(renderer.domElement);
+        // 初始化场景
+        const scene = new THREE.Scene();
 
         const camera = new THREE.PerspectiveCamera(40, 1, 1, 100);
         camera.position.set(5, 2, 8);
@@ -45,77 +47,75 @@ export const TreeGL = (props) => {
         controls.autoRotate = true;
         controls.autoRotateSpeed = 1.5;
 
-        function load() {
-            if (loaded || loading) {
-                return;
-            }
-            loading = true;
-            container?.classList.add('app-container-loading');
-            container?.classList.add('loading');
-            const imageUrls = new Array(480).fill(0).map((_, i) => {
-                return getPublicAssetPath(
-                    `files/tree/tree-model${IS_MOBILE ? '-mobile' : ''}/${
-                        i + 1 + 1000
-                    }.jpg`
+        const loader = new GLTFLoader();
+        loader.load(
+            getPublicAssetPath('files/tree/ThirdPersonExampleMap.gltf'), (gltf) => {
+                const model = gltf.scene;
+                model.position.set(0, -2, 0);
+                model.scale.set(1, 1, 1);
+                scene.add(model);
+                mixer = new THREE.AnimationMixer(model);
+                loaded = true;
+                loadingEE.emit(
+                    `progress.${LoadingSourceType.TREE_MODEL}`,
+                    1
                 );
-            });
-            const imageLoader = new THREE.ImageLoader();
-            Promise.all(imageUrls.map((url) => imageLoader.load(url)))
-                .then((data) => {
-                    imageDataArray = data;
-                    render();
-                    loaded = true;
-                    loadingEE.emit(
-                        `progress.${LoadingSourceType.TREE_MODEL}`,
-                        1
-                    );
-                })
-                .finally(() => {
-                    loading = false;
-                    container?.classList.remove('loading');
-                });
-        }
-        function render() {
-            if (loading || !loaded) {
-                return;
-            }
-            controls.update();
-            const index = Math.floor(
-                (((controls.getAzimuthalAngle() / Math.PI + 1) / 2) *
-                    imageDataArray.length +
-                    imageDataArray.length +
-                    0) %
-                    imageDataArray.length
-            );
-            // console.log(index);
-            if (renderedImageIndex !== index && context) {
-                renderedImageIndex = index;
-                context.drawImage(imageDataArray[index], 0, 0);
-            }
-        }
+            }, function (xhr) {
+                const loaded = xhr.loaded;
+                const total = xhr.total;
+                const percent = (loaded / total);
+
+            }, function (e) {
+
+                console.error(e);
+
+            })
+
+        // function load() {
+        //     if (loaded || loading) {
+        //         return;
+        //     }
+        //     loading = true;
+        //     container?.classList.add('app-container-loading');
+        //     container?.classList.add('loading');
+
+        // }
+
         function animate() {
             frameId = requestAnimationFrame(animate);
-            render();
+            const delta = clock.getDelta();
+
+            mixer.update(delta);
+            renderer.render(scene, camera);
+            controls.update();
         }
 
+        window.onresize = function () {
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+        };
+
         /** 首页loading结束后，再开始loading */
-        loadingEE.on('loaded', () => setTimeout(load, 200));
+        // loadingEE.on('loaded', () => setTimeout(load, 200));
 
         return {
             onVisible: () => {
-                load();
+                // load();
                 animate();
             },
             onHide: () => {
                 cancelAnimationFrame(frameId);
             },
-            onDestroy: () => {},
+            onDestroy: () => { },
         };
     });
 
     return (
         <div className='tree-gl' ref={containerRef}>
-            <canvas className='tree-gl-canvas' ref={canvasRef} />
         </div>
     );
 };

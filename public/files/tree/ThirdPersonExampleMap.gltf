@@ -1,0 +1,165 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 4.27.0 glTF Exporter 1.0.6"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 5040,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 1088,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -0.545054436,
+				-0.00999999978,
+				-0.548682749
+			],
+			"max": [ 0.545054436,
+				1.6966157,
+				0.548682749
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 1088,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 1088,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 1088,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "ThirdPersonExampleMap.bin",
+			"byteLength": 62304
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 10080,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 13056,
+			"byteOffset": 10080,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 13056,
+			"byteOffset": 23136,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 17408,
+			"byteOffset": 36192,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 8704,
+			"byteOffset": 53600,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "NewMaterial1_BaseColor.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "NewMaterial1",
+			"pbrMetallicRoughness":
+			{
+				"baseColorFactor": [ 0.671875,
+					0.671875,
+					0.671875,
+					1
+				],
+				"baseColorTexture":
+				{
+					"index": 0
+				}
+			},
+			"alphaMode": "BLEND",
+			"extensions":
+			{
+				"KHR_materials_unlit":
+				{
+				}
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "sm_TREE",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"name": "sm_TREE_2_StaticMeshComponent0",
+			"scale": [ 2,
+				2,
+				2
+			],
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"name": "NewMaterial1_BaseColor",
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"name": "ThirdPersonExampleMap",
+			"nodes": [ 0 ]
+		}
+	],
+	"textures": [
+		{
+			"name": "NewMaterial1_BaseColor",
+			"sampler": 0,
+			"source": 0
+		}
+	],
+	"extensionsUsed": [
+		"KHR_materials_unlit"
+	]
+}
