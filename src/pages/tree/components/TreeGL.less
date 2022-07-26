@@ -1,17 +1,47 @@
-@import '../../../styles/variables.less';
+@import "../../../styles/variables.less";
 
 .tree-gl {
-    .f-pseudo();
-    transform: translate(0, 20px);
+  .f-pseudo();
+  transform: translate(0, 20px);
 
-    .tree-gl-canvas {
-        position: absolute;
-        left: 50%;
-        transform: translate(-50%, 0);
-        top: auto;
-        bottom: 0;
-        width: auto;
-        height: 100%;
-        pointer-events: none;
-    }
+  .tree-gl-canvas {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: auto;
+    bottom: 0;
+    width: auto;
+    height: 100%;
+    pointer-events: none;
+  }
 }
+.vision-canvas {
+  .f-pseudo();
+}
+
+.vision-label {
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  color: #fff;
+  &-text {
+    padding-left: 20px;
+    width: 100px;
+    font-size: 22px;
+    vertical-align: middle;
+    top: -6px;
+    position: relative;
+  }
+
+  &::after {
+    .f-pseudo();
+    content: "";
+    background: #fff;
+    opacity: 0.8;
+    border-radius: 50%;
+  }
+}
+
